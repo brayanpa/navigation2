@@ -26,6 +26,7 @@ void GoalCritic::initialize()
   getParam(power_, "cost_power", 1);
   getParam(weight_, "cost_weight", 5.0f);
   getParam(threshold_to_consider_, "threshold_to_consider", 1.4f);
+  getParam(consider_path_inversions_, "consider_path_inversions_", false);
 
   RCLCPP_INFO(
     logger_, "GoalCritic instantiated with %d power and %f weight.",
@@ -40,8 +41,14 @@ void GoalCritic::score(CriticData & data)
     return;
   }
 
-  const auto & goal_x = data.goal.position.x;
-  const auto & goal_y = data.goal.position.y;
+  auto & goal_x = data.goal.position.x;
+  auto & goal_y = data.goal.position.y;
+
+  if (consider_path_inversions_) {
+    const unsigned int cusp_idx = data.path.x.size() - 1;
+    goal_x = data.path.x[cusp_idx];
+    goal_y = data.path.Y[cusp_idx];
+  }
 
   const auto delta_x = data.trajectories.x - goal_x;
   const auto delta_y = data.trajectories.y - goal_y;
