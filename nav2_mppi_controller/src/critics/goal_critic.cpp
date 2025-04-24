@@ -44,8 +44,8 @@ void GoalCritic::score(CriticData & data)
     return;
   }
 
-  auto & goal_x = data.goal.position.x;
-  auto & goal_y = data.goal.position.y;
+  auto goal_x = data.goal.position.x;
+  auto goal_y = data.goal.position.y;
 
   if (consider_path_inversions_) {
     const unsigned int cusp_idx = data.path.x.size() - 1;
