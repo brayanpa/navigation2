@@ -56,13 +56,14 @@ void GoalCritic::score(CriticData & data)
   const auto delta_x = data.trajectories.x - goal_x;
   const auto delta_y = data.trajectories.y - goal_y;
 
-  if(power_ > 1u) {
-    data.costs += (((delta_x.square() + delta_y.square()).sqrt()).rowwise().mean() *
-      weight_).pow(power_);
-  } else {
-    data.costs += (((delta_x.square() + delta_y.square()).sqrt()).rowwise().mean() *
-      weight_).eval();
-  }
+  const auto traj_x = xt::view(data.trajectories.x, xt::all(), xt::all());
+  const auto traj_y = xt::view(data.trajectories.y, xt::all(), xt::all());
+
+  auto dists = xt::sqrt(
+    xt::pow(traj_x - goal_x, 2) +
+    xt::pow(traj_y - goal_y, 2));
+
+  data.costs += xt::pow(xt::mean(dists, {1}, immediate) * weight_, power_);
 }
 
 }  // namespace mppi::critics
