@@ -227,7 +227,7 @@ inline geometry_msgs::msg::Pose getLastPathPose(const models::Path & path)
 {
   const unsigned int path_last_idx = path.x.size() - 1;
 
-  auto last_orientation = data.path.yaws(path_last_idx);
+  auto last_orientation = path.yaws(path_last_idx);
 
   tf2::Quaternion pose_orientation;
   pose_orientation.setRPY(0.0, 0.0, last_orientation);
