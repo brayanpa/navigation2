@@ -56,7 +56,7 @@ void GoalAngleCritic::score(CriticData & data)
   {
     return;
   }
-
+  
   tf2::Quaternion goal_orientation_q;
   tf2::fromMsg(active_goal_.orientation, goal_orientation_q);
   double goal_yaw = tf2::getYaw(goal_orientation_q);
